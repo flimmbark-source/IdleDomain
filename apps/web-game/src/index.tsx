@@ -12,6 +12,22 @@ import {
 } from "./state/gameState";
 import { enemyMovementSystem } from "./systems/enemyMovementSystem";
 
+export function startGame() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 800;
+  canvas.height = 600;
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext("2d")!;
+  
+  function loop() {
+    // TODO: All per-frame updates
+    requestAnimationFrame(loop);
+  }
+  
+  loop();
+}
+
 const App: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
