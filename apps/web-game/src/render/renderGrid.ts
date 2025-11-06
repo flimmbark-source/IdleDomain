@@ -37,10 +37,11 @@ export function renderGrid(
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
   for (let y = 0; y < gridHeight; y += 1) {
-    const drawY = gridHeight - y - 1;
+    const drawY = gridHeight - 1 - y;
 
     for (let x = 0; x < gridWidth; x += 1) {
-      const px = x * cellSize;
+      const drawX = x;
+      const px = drawX * cellSize;
       const py = drawY * cellSize;
       const isWall = y === wallRow;
 
@@ -57,8 +58,9 @@ export function renderGrid(
 
   ctx.fillStyle = enemyColor;
   for (const enemy of enemies) {
-    const px = enemy.x * cellSize;
-    const drawY = gridHeight - enemy.y - 1;
+    const drawX = enemy.x;
+    const drawY = gridHeight - 1 - enemy.y;
+    const px = drawX * cellSize;
     const py = drawY * cellSize;
 
     ctx.fillRect(px, py, cellSize - 1, cellSize - 1);

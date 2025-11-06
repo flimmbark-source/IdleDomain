@@ -6,9 +6,9 @@ export function enemyMovementSystem(delta: number) {
   }
 
   for (const enemy of enemies) {
-    enemy.y += enemy.speed * delta;
+    enemy.y -= enemy.speed * delta;
 
-    if (enemy.y >= wallRow) {
+    if (enemy.y <= wallRow) {
       breach();
       return;
     }
