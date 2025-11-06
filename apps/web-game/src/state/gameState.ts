@@ -1,8 +1,8 @@
 import { Enemy } from "../entities/enemy";
 
 export const gridWidth = 20;
-export const gridHeight = 14;
-export const wallRow = Math.max(0, gridHeight - 3);
+export const gridHeight = 30;
+export const wallRow = 10;
 
 export const enemies: Enemy[] = [];
 
@@ -14,7 +14,7 @@ export function spawnEnemy() {
   }
 
   const x = Math.floor(Math.random() * gridWidth);
-  const y = 0;
+  const y = gridHeight + 3;
 
   enemies.push(new Enemy(x, y));
 }
