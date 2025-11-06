@@ -2,7 +2,15 @@ import React, { useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 
 import { renderGrid } from "./render/renderGrid";
-import { gridHeight, gridWidth, wallRow } from "./state/gameState";
+import {
+  enemies,
+  gameState,
+  gridHeight,
+  gridWidth,
+  spawnEnemy,
+  wallRow,
+} from "./state/gameState";
+import { enemyMovementSystem } from "./systems/enemyMovementSystem";
 
 const App: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -19,13 +27,37 @@ const App: React.FC = () => {
     }
 
     let animationFrame: number;
+    let lastTimestamp = 0;
+    let spawnCounter = 0;
+    const spawnInterval = 120;
 
-    const renderFrame = () => {
-      renderGrid(ctx, { gridWidth, gridHeight, wallRow });
-      animationFrame = requestAnimationFrame(renderFrame);
+    const renderFrame = (timestamp: number) => {
+      if (!lastTimestamp) {
+        lastTimestamp = timestamp;
+      }
+
+      const delta = (timestamp - lastTimestamp) / 1000;
+      lastTimestamp = timestamp;
+
+      if (!gameState.runEnded) {
+        spawnCounter += 1;
+
+        if (spawnCounter >= spawnInterval) {
+          spawnEnemy();
+          spawnCounter = 0;
+        }
+
+        enemyMovementSystem(delta);
+      }
+
+      renderGrid(ctx, { gridWidth, gridHeight, wallRow, enemies });
+
+      if (!gameState.runEnded) {
+        animationFrame = requestAnimationFrame(renderFrame);
+      }
     };
 
-    renderFrame();
+    animationFrame = requestAnimationFrame(renderFrame);
 
     return () => {
       cancelAnimationFrame(animationFrame);
